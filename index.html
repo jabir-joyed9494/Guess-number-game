@@ -1,45 +1,153 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-        <link rel="stylesheet" href="for-css/style.css">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+  <link rel="stylesheet" href="for-css/style.css">
+
+  <title>Guess a number game</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/aad846051f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container-fluid py-5 hero-section">
+
+    <div class="container  pt-4">
+      <div class="container middle-section" style="width: 600px;">
+        <p class="hero-section-heading font-large">Number guessing game</p>
+        <p class="hero-section-paragraph">We have selected a random number between 1 and 100. See if you can guess it in
+          10 turns or fewer.
+          We'll tell you if your guess was too high or too low.</p>
+
+        <div class="form">
+          <label for="guessField">Enter a guess</label>
+          <input style="width: 200px; margin-left: 10px;" id="guessField" type="number" class="guessField" min="1"
+            max="100" required="">
+          <input class="guessSubmit" type="submit" value="Submit guess">
+        </div>
+
+
+        <div class="resultParas">
+          <p class="guesses"></p>
+          <p class="lastResult" style="background-color: white;"></p>
+          <p class="lowOrHi"></p>
+        </div>
+
+        <script>
+      let rendomNumber=Math.floor(Math.random() * 100)+1;
+
+const guesses=document.querySelector(".guesses");
+const lastResult=document.querySelector(".lastResult");
+const lowOrHi=document.querySelector(".lowOrHi");
+
+const guessSubmit=document.querySelector(".guessSubmit");
+const guessField=document.querySelector(".guessField");
+
+let guessCount=1;
+let resetButton;
+guessField.focus();
+
+function checkGuess(){
     
-        <title>Guess a number game</title>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://kit.fontawesome.com/aad846051f.js" crossorigin="anonymous"></script>
-      </head>
+    const userGuess=Number(guessField.value);
 
-      <body>
-         <div class="container-fluid bg-primary py-5 hero-section">
+    if(guessCount===1)
+    {
+        guesses.textContent="Previous gusses :";
+    }
+   
+    guesses.textContent = `${guesses.textContent} ${userGuess}`;
 
-            <div class="container bg-secondary pt-4">
-                  <div class="container bg-warning" style="width: 600px;">
-                    <p class="hero-section-heading font-large">Number guessing game</p>
-                    <p class="hero-section-paragraph">We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer.
-                      We'll tell you if your guess was too high or too low.</p>
+    if(userGuess===rendomNumber)
+    {
+        lastResult.textContent="Congratulations! You got it right!";
+        lastResult.style.backgroundColor = "green";
+        lowOrHi.textContent="";
+        setGameOver();
+    }
+    else if(guessCount===10)
+    {
+        lastResult.textContent="!!!GAME OVER!!!";
+        lastResult.style.backgroundColor="red";
+        lowOrHi.textContent="";
+        setGameOver();
+    }
+    else
+    {
+        lastResult.textContent="Wrong";
+        lastResult.style.backgroundColor="red";
 
-                      <div class="form">
-                        <label for="guessField">Enter a guess</label>
-                        <input style="width: 200px; margin-left: 10px;" id="guessField" type="number" class="guessField" min="1" max="100" required="">
-                        <input class="guessSubmit" type="submit" value="Submit guess">
-                      </div>
+        if(userGuess>rendomNumber)
+        {
+            lowOrHi.textContent="Last guess was too high!";
+        }
+        else if(rendomNumber>userGuess)
+        {
+            lowOrHi.textContent="Last guess was too low!"
+        }
+    }
 
-                      <div class="resultParas">
-                     <p class="guesses"></p>
-                     <p class="lastResult" style="background-color: white;"></p>
-                     <p class="lowOrHi"></p>
-                      </div>
+    guessCount++;
+    guessField.value="";
+    guessField.focus();
 
-                      <script src="scripts/main.js"></script>
-                      <button>Start new game</button>
+}
 
-                  </div>
-            </div>
-         </div>
+guessSubmit.addEventListener("click", checkGuess);
 
-      </body>
 
-</html>
+
+function setGameOver() {
+  guessField.disabled = true;
+  guessSubmit.disabled = true;
+
+  resetButton = document.createElement("button");
+  resetButton.textContent = "Start new game";
+   resetButton.classList.add("btn" , "btn-secondary", "my-3")
+
+  // document.body.append(resetButton);
+  document.querySelector(".container.middle-section").append(resetButton);
+  resetButton.addEventListener("click", resetGame);
+}
+
+
+
+
+function resetGame()
+{
+    guessCount=1;
+
+    const resetParas=document.querySelectorAll(".resultParas p");
+    for( const resetPara of resetParas)
+    {
+        resetPara.textContent="";
+    }
+
+    resetButton.parentNode.removeChild(resetButton);
+
+    guessField.disable=false;
+    guessSubmit.disable=false;
+     guessField.value="";
+     guessField.focus();
+
+     lastResult.style.backgroundColor="white";
+     rendomNumber=Math.floor(Math.random()*100)+1;
+}
+
+
+        </script>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html> 
+
+
+
