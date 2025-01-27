@@ -109,7 +109,6 @@ function setGameOver() {
   resetButton.textContent = "Start new game";
    resetButton.classList.add("btn" , "btn-secondary", "my-3")
 
-  // document.body.append(resetButton);
   document.querySelector(".container.middle-section").append(resetButton);
   resetButton.addEventListener("click", resetGame);
 }
@@ -129,8 +128,8 @@ function resetGame()
 
     resetButton.parentNode.removeChild(resetButton);
 
-    guessField.disable=false;
-    guessSubmit.disable=false;
+    guessField.disabled=false;
+    guessSubmit.disabled=false;
      guessField.value="";
      guessField.focus();
 
